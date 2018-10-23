@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var pug = require('gulp-pug');
 var sass = require('gulp-sass');
+var autoprefixer = require('gulp-autoprefixer');
 var ts = require('gulp-typescript');
 var concat = require('gulp-concat');
 var gulpSequence = require('gulp-sequence');
@@ -49,6 +50,9 @@ gulp.task('views', function buildHTML() {
 gulp.task('sass', function() {
     return gulp.src('./css/*.scss')
         .pipe(sass().on('error', sass.logError))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions']
+        }))
         .pipe(concat('style.css'))
         .pipe(gulp.dest('./css'));
 });
