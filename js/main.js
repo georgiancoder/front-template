@@ -8,3 +8,8 @@ var Contact = /** @class */ (function () {
     }
     return Contact;
 }());
+$().ready(function () {
+    if ($(".aboutpage").length) {
+        var about = new About();
+    }
+});
