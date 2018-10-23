@@ -10,22 +10,17 @@ var fs = require('fs');
 sass.compiler = require('node-sass');
 
 gulp.task('default', ['typescript', 'sass', 'views'], function() {
-    let cssFiles = [];
-    let jsFiles = [];
-    let filesCss = fs.readdirSync('./css');
-    filesCss.forEach(item => {
-        if (/\.css$/gi.test(item)) {
-            cssFiles.push(`css/${item}`);
-        }
+    gulp.watch('./css/*.scss', function() {
+        gulp.run('sass');
+        gulp.run('views');
     });
-    InjectFiles('css', cssFiles);
-    let filesJs = fs.readdirSync('./js');
-    filesJs.forEach(item => {
-        if (/\.js$/gi.test(item)) {
-            jsFiles.push(`js/${item}`);
-        }
+    gulp.watch('./*.pug', function() {
+        gulp.run('views');
     });
-    InjectFiles('js', jsFiles);
+    gulp.watch('js/*.ts', function() {
+        gulp.run('typescript');
+        gulp.run('views');
+    })
 });
 
 gulp.task('typescript', function() {
@@ -44,7 +39,10 @@ gulp.task('views', function buildHTML() {
         .pipe(pug({
             doctype: 'html',
             pretty: true
-        })).pipe(gulp.dest('./'));
+        })).pipe(gulp.dest('./'))
+        .on('end',function(){
+            Inject();
+        });
 });
 
 gulp.task('sass', function() {
@@ -56,6 +54,26 @@ gulp.task('sass', function() {
         .pipe(concat('style.css'))
         .pipe(gulp.dest('./css'));
 });
+
+
+function Inject() {
+    let cssFiles = [];
+    let jsFiles = [];
+    let filesCss = fs.readdirSync('./css');
+    filesCss.forEach(item => {
+        if (/\.css$/gi.test(item)) {
+            cssFiles.push(`css/${item}`);
+        }
+    });
+    InjectFiles('css', cssFiles);
+    let filesJs = fs.readdirSync('./js');
+    filesJs.forEach(item => {
+        if (/\.js$/gi.test(item)) {
+            jsFiles.push(`js/${item}`);
+        }
+    });
+    InjectFiles('js', jsFiles);
+}
 
 function InjectFiles(type, files) {
     let replaceStr = '';
