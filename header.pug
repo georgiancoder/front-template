@@ -1,2 +1,9 @@
+include variables.pug
 header
-	
+	a.logo(href="")
+		img(src="")
+	nav
+		ul
+			each item in menuItems
+				li
+					a(href=item.href)=item.name
