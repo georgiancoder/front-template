@@ -9,7 +9,7 @@ var fs = require('fs');
 
 sass.compiler = require('node-sass');
 
-gulp.task('default', ['typescript', 'sass', 'views'], function() {
+gulp.task('default', ['typescript', 'sass', 'responsive', 'views'], function() {
     gulp.watch('./css/*.scss', function() {
         gulp.run('sass');
         gulp.run('views');
@@ -20,7 +20,10 @@ gulp.task('default', ['typescript', 'sass', 'views'], function() {
     gulp.watch('js/*.ts', function() {
         gulp.run('typescript');
         gulp.run('views');
-    })
+    });
+    gulp.watch('css/responsive.css', function() {
+        gulp.run('responsive');
+    });
 });
 
 gulp.task('typescript', function() {
@@ -55,6 +58,13 @@ gulp.task('sass', function() {
         .pipe(gulp.dest('./css'));
 });
 
+gulp.task('responsive', function() {
+    return gulp.src('./css/responsive.css')
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions']
+        }))
+        .pipe(gulp.dest('./css'));
+});
 
 function Inject() {
     let cssFiles = [];

@@ -8,6 +8,11 @@ var Contact = /** @class */ (function () {
     }
     return Contact;
 }());
+var HomePage = /** @class */ (function () {
+    function HomePage() {
+    }
+    return HomePage;
+}());
 $().ready(function () {
     if ($(".aboutpage").length) {
         var about = new About();
